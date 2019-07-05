@@ -2,9 +2,9 @@ const proc = require('child_process');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
+const expect = require('./expect');
 const app = express();
-const EXPECT_TEMPLATE = fs.readFileSync(path.join(__dirname, 'scriptTemplate.sh'));
+const EXPECT_IMPORT_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'importKeyTemplate.sh'));
 
 app
 .use(express.json())
@@ -16,7 +16,7 @@ app
         err = err.toString();
 
         if(err.match(/no contract or key named/)){
-            let importKeyScript = EXPECT_TEMPLATE.toString()
+            let importKeyScript = EXPECT_IMPORT_KEY_TEMPLATE.toString()
                 .replace(/ACC_NAME/, req.body.accName)
                 .replace(/ACC_EMAIL/, req.body.accEmail)
                 .replace(/SECRET_WORDS/, req.body.words
@@ -24,28 +24,7 @@ app
                     .join('\n'))
                 .replace(/PAPER_WALLET_PASSWORD/, req.body.paperWalletPassword)
                 .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword);
-            let procImportKey = proc.spawn('expect');
-            let output = [];
-            let errors = [];
-            procImportKey.stdin.write(importKeyScript);
-            procImportKey.stdout.on('data', result => {
-                result = result.toString();
-                console.log(result);
-                output.push(result);
-            });
-            procImportKey.stderr.on('data', result => {
-                result = result.toString();
-                console.error('err', result);
-                errors.push(result);
-            });
-            procImportKey.on('exit', (code, signal) => {
-                res.status(200).send({
-                    output: output,
-                    errors: errors,
-                    code: code,
-                    signal: signal
-                });
-            })
+            expect.runInExpect(importKeyScript, result => res.status(200).send(result));
         }
         else if(err && !err.trim().match(/^Disclaimer:[\s\S]*in their network interactions\.$/mg)){
             res.status(500).send(err);
