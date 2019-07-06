@@ -5,6 +5,8 @@ const path = require('path');
 const expect = require('./expect');
 const app = express();
 const EXPECT_IMPORT_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'importKeyTemplate.sh'));
+const EXPECT_CREATE_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'createKeyTemplate.sh'));
+const EXPECT_START_BAKING_TEMPLATE = fs.readFileSync(path.join(__dirname, 'startBakingTemplate.sh'));
 
 app
 .use(express.json())
@@ -39,20 +41,15 @@ app
     })
 })
 .post('/startBaking', (req, res) => {
-    let procInstanceStartBake = proc.spawn('/home/ubuntu/tezos/tezos-baker-003-PsddFKi3', 'run', 'with', 'local', 'node', '/home/ubuntu/.tezos-node', req.body.accName);
-    procInstanceStartBake.stdout.on('data', data => {
-        data = data.toString();
-
-        if(data.match(/Enter password for encrypted key/)){
-            procInstanceStartBake.stdin.write(req.body.userPassword);
-        }
-        else if(data.match(/Node synchronized/)){
-            res.status(200).send(data);
-        }
-    });
-    procInstanceStartBake.on('error', err => {
-        console.error(err.toString());
-    });
-
+    let startBakingKeyScript = EXPECT_START_BAKING_TEMPLATE.toString()
+        .replace(/ACC_NAME/, req.body.accName)
+        .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword);
+    expect.runInExpect(startBakingKeyScript, result => res.status(200).send(result));
+})
+.post('/createKey', (req, res) => {
+    let createKeyScript = EXPECT_CREATE_KEY_TEMPLATE.toString()
+        .replace(/ACC_NAME/, req.body.accName)
+        .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword);
+    expect.runInExpect(createKeyScript, result => res.status(200).send(result));
 })
 .listen(8081);
