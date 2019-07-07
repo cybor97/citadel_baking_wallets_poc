@@ -1,0 +1,47 @@
+version: 0.0.1
+jobs:
+  build:
+    branches:
+      only:
+        - master
+    docker:
+      - image: circleci/node:9.11.2-stretch
+
+    working_directory: ~/repo/citadel_baking_wallets_poc
+
+    steps:
+      - checkout
+        
+      - run:
+          name: Preparing to build
+          command: |
+            sudo npm i -g npm npx
+        
+      - restore_cache:
+          keys:
+          - dependencies-{{ checksum "package.json" }}
+          - dependencies-
+
+      - run:
+          name: Installing dependencies
+          command: |
+            npm i
+            
+      - run:
+          name: Building apidoc
+          command: |
+            npx apidoc -e node_modules
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-{{ checksum "package.json" }}
+        
+        
+      - run:
+          name: Deploying
+          command: |
+            zip -r citadel_baking_wallets_poc.zip ./
+
+            scp -oStrictHostKeyChecking=no citadel_baking_wallets_poc.zip ${ssh_connection}:citadel_baking_wallets_poc.zip;
+            ssh -oStrictHostKeyChecking=no ${ssh_connection} <<< $'./install.sh';

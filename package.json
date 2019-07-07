@@ -1,0 +1,22 @@
+{
+  "name": "citadel_baking_wallets",
+  "version": "1.0.0",
+  "description": "Citadel baking wallets management",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cybor97/citadel_baking_wallets_poc.git"
+  },
+  "author": "cybor97",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cybor97/citadel_baking_wallets_poc/issues"
+  },
+  "homepage": "https://github.com/cybor97/citadel_baking_wallets_poc#readme"
+}
