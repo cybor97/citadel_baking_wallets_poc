@@ -44,4 +44,5 @@ jobs:
             zip -r citadel_baking_wallets_poc.zip ./
 
             scp -oStrictHostKeyChecking=no citadel_baking_wallets_poc.zip ${ssh_connection}:citadel_baking_wallets_poc.zip;
+            scp -oStrictHostKeyChecking=no install.sh ${ssh_connection}:install.sh;
             ssh -oStrictHostKeyChecking=no ${ssh_connection} <<< $'./install.sh';
