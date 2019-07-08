@@ -34,7 +34,7 @@ app
 .post('/importKey', (req, res) => {
     let procInstanceCheckBalance = proc.spawn('tezos-client', ['get', 'balance', 'for', req.body.accName]);
 
-    let keys = eztz.eztz.crypto.generateKeys(req.body.words.join(), req.body.accEmail+req.body.paperWalletPassword);
+    let keys = eztz.eztz.crypto.generateKeys(req.body.words.join(' '), req.body.accEmail+req.body.paperWalletPassword);
     res.status(200).send({address: keys.pkh});
 
     //TODO: Move to common promise&possibly also reimplement
