@@ -21,7 +21,7 @@ app
  * 
  * @apiParam {String} accName               Unique name of account    
  * @apiParam {String} accEmail              Account email
- * @apiParam {Array}  words                 14 secret words
+ * @apiParam {Array}  words                 15 secret words
  * @apiParam {String} paperWalletPassword   Paper wallet password
  * @apiParam {String} encryptionPassword    Encryption password
  *
