@@ -4,7 +4,8 @@
   "description": "Citadel baking wallets management",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "eztz.js": "git+https://github.com/TezTech/eztz.git"
   },
   "devDependencies": {
     "apidoc": "^0.17.7"

@@ -3,6 +3,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const expect = require('./expect');
+const eztz = require('eztz.js');
 const app = express();
 const EXPECT_IMPORT_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/importKeyTemplate.sh'));
 const EXPECT_CREATE_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/createKeyTemplate.sh'));
@@ -33,6 +34,7 @@ app
 .post('/importKey', (req, res) => {
     let procInstanceCheckBalance = proc.spawn('tezos-client', ['get', 'balance', 'for', req.body.accName]);
 
+    console.log(eztz.eztz.crypto.generateKeys(req.body.words.join(), req.body.accEmail+req.body.paperWalletPassword));
     procInstanceCheckBalance.stderr.on('data', err => {
         err = err.toString();
 
