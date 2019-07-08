@@ -8,7 +8,7 @@ SECRET_WORDS
 
 expect "Enter the password used for the paper wallet:";
 send "PAPER_WALLET_PASSWORD\r";
-expect "Your public Tezos address is tz1LiqZYz84tDBofQCpx68YQJJnJ1HZb1d3X is that correct? (Y/n/q):";
+expect -re "Your public Tezos address is \[a-zA-Z0-9\]* is that correct? (Y/n/q):";
 send "Y\r";
 expect "Enter password to encrypt your key:";
 send "ENCRYPTION_PASSWORD\r";
