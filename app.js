@@ -34,7 +34,10 @@ app
 .post('/importKey', (req, res) => {
     let procInstanceCheckBalance = proc.spawn('tezos-client', ['get', 'balance', 'for', req.body.accName]);
 
-    console.log(eztz.eztz.crypto.generateKeys(req.body.words.join(), req.body.accEmail+req.body.paperWalletPassword));
+    let keys = eztz.eztz.crypto.generateKeys(req.body.words.join(), req.body.accEmail+req.body.paperWalletPassword);
+    res.status(200).send({address: keys.pkh});
+
+    //TODO: Move to common promise&possibly also reimplement
     procInstanceCheckBalance.stderr.on('data', err => {
         err = err.toString();
 
@@ -47,10 +50,10 @@ app
                     .join('\n'))
                 .replace(/PAPER_WALLET_PASSWORD/, req.body.paperWalletPassword)
                 .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword);
-            expect.runInExpect(importKeyScript, result => res.status(200).send(result));
+            expect.runInExpect(importKeyScript, result => console.log(result));
         }
         else if(err && !err.trim().match(/^Disclaimer:[\s\S]*in their network interactions\.$/mg)){
-            res.status(500).send(err);
+            console.error(err);
         }
     });
     procInstanceCheckBalance.stdout.on('data', data => {
