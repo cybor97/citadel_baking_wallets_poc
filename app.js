@@ -99,7 +99,7 @@ app
     let startBakingKeyScript = EXPECT_START_BAKING_TEMPLATE.toString()
         .replace(/ACC_NAME/, req.body.accName)
         .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword);
-    expect.runInExpect(startBakingKeyScript, result => res.status(200).send(result), /Baker started\./);
+    expect.runInExpect(startBakingKeyScript, result => res.status(200).send(result), /Baker started\./g);
 })
 
 .listen(8080);
