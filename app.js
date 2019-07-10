@@ -5,10 +5,11 @@ const path = require('path');
 const expect = require('./expect');
 const eztz = require('eztz.js');
 const app = express();
+//TODO:Review template usage(reimplement without external apps usage)
 const EXPECT_IMPORT_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/importKeyTemplate.sh'));
 const EXPECT_CREATE_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/createKeyTemplate.sh'));
 const EXPECT_START_BAKING_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/startBakingTemplate.sh'));
-
+//TODO:Reimplement with "real" task management
 const importKeyQueue = {/**accName: state*/};
 const bakingStates = {/**accName: state */};
 
@@ -133,11 +134,11 @@ app
             }, 
             /Baker started\./g, () => {
                 bakingStates[accName] = 'baking';
-                res.status(200).send({accName: req.query.accName, state: bakingStates[req.query.accName]});
+                res.status(200).send({accName: req.body.accName, state: bakingStates[req.body.accName]});
             });
     }
     else{
-        res.status(200).send({accName: req.query.accName, state: bakingStates[req.query.accName]});
+        res.status(200).send({accName: req.body.accName, state: bakingStates[req.body.accName]});
     }
 })
 
