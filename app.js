@@ -146,25 +146,25 @@ app
  * @api {get} /state/importKey Import key state
  * @apiName stateImportKey
  * @apiGroup state
- * @apiDescription Import key state
+ * @apiDescription Check import key state for accName
  * 
  * @apiParam {String} accName               Unique name of account    
  *
- * @apiSuccess {Object} importKeyState {"accName": "tz123456", "state": "enqueued/processing/imported/error"|null}
+ * @apiSuccess {Object} importKeyState {"accName": "someacc", "state": "enqueued/processing/imported/error"|null}
  */
 .get('/state/importKey', (req, res) => {   
     res.status(200).send({accName: req.query.accName, state: importKeyQueue[req.query.accName] || null});
 })
 
 /**
- * @api {get} /importKey Import key data
+ * @api {get} /state/baking Check baking state
  * @apiName stateBaking
  * @apiGroup state
- * @apiDescription Import key data for tezos-client and tezos-baker
+ * @apiDescription Check baking state for accName
  * 
  * @apiParam {String} accName               Unique name of account    
  *
- * @apiSuccess {Object} importKeyState {"accName": "tz123456", "address": "tz12345",  "state": "enqueued/processing/imported/error"|null}
+ * @apiSuccess {Object} BakingState {"accName": "someAccName", "state": "enqueued/processing/imported/error"|null}
  */
 .get('/state/baking', (req, res) => {
     res.status(200).send({accName: req.query.accName, state: bakingStates[req.query.accName] || null});
