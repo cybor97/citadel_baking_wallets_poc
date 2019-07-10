@@ -1,7 +1,7 @@
 const child_process = require('child_process');
 
 module.exports = {
-    runInExpect: (script, callback, detachTriggerRegex) => {
+    runInExpect: (script, callback, callbackTriggerRegex, triggeredCallback) => {
         let proc = child_process.spawn('expect');
         let output = [];
         let errors = [];
@@ -9,9 +9,8 @@ module.exports = {
         proc.stdout.on('data', result => {
             result = result.toString();
             output.push(result);
-            if(detachTriggerRegex && result.match(detachTriggerRegex)){
-                proc.removeAllListeners();
-                callback({
+            if(callbackTriggerRegex && result.match(callbackTriggerRegex) && triggeredCallback){
+                triggeredCallback({
                     output: output,
                     errors: errors,
                     code: 0,
