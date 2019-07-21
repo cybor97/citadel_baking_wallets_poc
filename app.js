@@ -69,15 +69,15 @@ app
                 importKeyQueue[req.body.accName] = 'error';
                 console.error(err);
             }
-        });    
+        });
+        procInstanceCheckBalance.stdout.on('data', data => {
+            data = data.toString();
+            let balanceMatch = data.match(/\d* ꜩ/); 
+            if(balanceMatch){
+                importKeyQueue[req.body.accName] = 'imported';
+            }
+        })    
     }
-    procInstanceCheckBalance.stdout.on('data', data => {
-        data = data.toString();
-        let balanceMatch = data.match(/\d* ꜩ/); 
-        if(balanceMatch){
-            importKeyQueue[req.body.accName] = 'imported';
-        }
-    })
 })
 
 
