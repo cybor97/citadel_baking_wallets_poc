@@ -2,6 +2,7 @@ const proc = require('child_process');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const expect = require('./expect');
 const eztz = require('eztz.js');
 const app = express();
@@ -123,7 +124,8 @@ app
     if(bakingStates[accName] != 'processing' && bakingStates[accName] != 'baking'){
         let startBakingKeyScript = EXPECT_START_BAKING_TEMPLATE.toString()
             .replace(/ACC_NAME/, req.body.accName)
-            .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword);
+            .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword)
+            .replace(/OS_HOMEDIR/g, os.userInfo().homedir);
 
         bakingStates[accName] = 'processing';
 
