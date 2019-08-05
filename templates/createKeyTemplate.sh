@@ -1,5 +1,5 @@
 #!/usr/bin/expect -f
-set timeout 1;
+set timeout 10;
 spawn tezos-client gen keys ACC_NAME;
 expect "Enter password to encrypt your key:";
 send "ENCRYPTION_PASSWORD\r";

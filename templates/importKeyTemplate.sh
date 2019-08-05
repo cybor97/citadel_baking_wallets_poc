@@ -1,5 +1,5 @@
 #!/usr/bin/expect -f
-set timeout 1;
+set timeout 10;
 spawn tezos-client import fundraiser secret key ACC_NAME;
 expect "Enter the e-mail used for the paper wallet:";
 send "ACC_EMAIL\r";
