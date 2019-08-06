@@ -18,7 +18,19 @@ module.exports = {
                 });
             }
         });
-        proc.stderr.on('data', result => errors.push(result.toString()));
+        proc.stderr.on('data', result => {
+            result = result.toString();
+            errors.push(result);
+
+            if(callbackTriggerRegex && result.match(callbackTriggerRegex) && triggeredCallback){
+                triggeredCallback({
+                    output: output,
+                    errors: errors,
+                    code: 0,
+                    signal: null    
+                });
+            }
+        });
 
         proc.on('exit', (code, signal) => {
             callback({
