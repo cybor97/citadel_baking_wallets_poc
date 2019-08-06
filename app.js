@@ -134,7 +134,7 @@ app
                 bakingStates[accName] = 'stopped';
                 console.log(result);
             }, 
-            /Baker started|Error\./g, ({output, errors}) => {
+            /(Baker started)|(Error)/g, ({output, errors}) => {
                 let isError = !!output.match(/Error/);
                 bakingStates[accName] = isError ? 'error' : 'baking';
 

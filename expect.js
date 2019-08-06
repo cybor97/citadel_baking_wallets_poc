@@ -7,7 +7,7 @@ module.exports = {
         let errors = [];
         proc.stdin.write(script);
         proc.stdout.on('data', result => {
-            result = result.toString();
+            result = result.toString().replace(/\u001b\[.*?m|\r|\n/gm, '');
             output.push(result);
             if(callbackTriggerRegex && result.match(callbackTriggerRegex) && triggeredCallback){
                 triggeredCallback({
