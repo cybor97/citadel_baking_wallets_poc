@@ -135,7 +135,7 @@ app
                 console.log(result);
             }, 
             /(Baker started)|(Error)/g, ({output, errors}) => {
-                let isError = !!output.match(/Error/);
+                let isError = !!(output && output.find(item => item.match(/Error/)));
                 bakingStates[accName] = isError ? 'error' : 'baking';
 
                 res.status(isError? 500 : 200).send({accName: req.body.accName, state: bakingStates[req.body.accName]});
