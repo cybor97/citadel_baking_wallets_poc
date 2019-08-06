@@ -58,7 +58,7 @@ app
                     .replace(/PAPER_WALLET_PASSWORD/, req.body.paperWalletPassword)
                     .replace(/ENCRYPTION_PASSWORD/g, req.body.encryptionPassword);
                 expect.runInExpect(importKeyScript, result => {
-                    if(result.errors.match(/already exists/gm) || result.code == 0){
+                    if(result.errors && result.errors.join('').match(/already exists/gm) || result.code == 0){
                         importKeyQueue[req.body.accName] = 'imported';
                     }
                     else{
