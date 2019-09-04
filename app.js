@@ -10,6 +10,7 @@ const app = express();
 const EXPECT_IMPORT_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/importKeyTemplate.sh'));
 const EXPECT_CREATE_KEY_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/createKeyTemplate.sh'));
 const EXPECT_START_BAKING_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/startBakingTemplate.sh'));
+const REGISTER_KEY_AS_DELEGATE_TEMPLATE = fs.readFileSync(path.join(__dirname, 'templates/registerKeyAsDelegateTemplate.sh'));
 //TODO:Reimplement with "real" task management
 const importKeyQueue = {/**accName: state*/};
 const bakingStates = {/**accName: state */};
@@ -144,6 +145,26 @@ app
     else{
         res.status(200).send({accName: req.body.accName, state: bakingStates[req.body.accName]});
     }
+})
+
+/**
+ * @api {post} /registerKeyAsDelegate Register key as delegate
+ * @apiName registerKeyAsDelegate
+ * @apiGroup keys
+ * @apiDescription Register key as delegate with tezos-client
+ * 
+ * @apiParam {String} accName               Unique name of account    
+ *
+ * @apiSuccess {Object} bakingState {"accName": "someAccName", "state": "enqueued/processing/baking/stopped"}
+ */
+.post('/registerKeyAsDelegate', (req, res) => {
+    let registerKeyAsDelegate = REGISTER_KEY_AS_DELEGATE_TEMPLATE.toString()
+        .replace(/ACC_NAME/, req.body.accName);
+
+        expect.runInExpect(registerKeyAsDelegate,
+            (result) => {
+                res.status(200).send(result);
+            });
 })
 
 /**
